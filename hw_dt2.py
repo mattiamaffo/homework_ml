@@ -84,6 +84,8 @@ def svm_model(X_train, Y_train, x_test, y_test):
     plt.savefig('matrix_confusion_svm_dt2.png')
     plt.show()
 
+    return bagging_classifier
+
 def perceptron_model(X_train, Y_train, x_test, y_test):
     # FIND BEST PARAMETERS WITH RANDOMIZED-SEARCH:
 
@@ -217,11 +219,20 @@ X_train, x_test, Y_train, y_test = train_test_split(x_data, y, test_size= 0.2, r
 
 #TEST THE MODELS:
 print("Run SVM...\n")
-svm_model(X_train, Y_train, x_test, y_test)
+model1 = svm_model(X_train, Y_train, x_test, y_test)
 print("Run Perceptron...\n")
 perceptron_model(X_train, Y_train, x_test, y_test)
 print("Run Forest Classifier...\n")
 forest_classifier_model(X_train, Y_train, x_test, y_test)
+
+blind_test = ld.load_data('blind_test2.csv')
+print("data: \n", blind_test)
+x_data_b = blind_test[0]
+x_data_b = np.array(x_data_b)
+x_data_b = normalize(x_data_b, norm='l2')
+y_pred_b = model1.predict(x_data_b)
+print("Label predette: \n", y_pred_b)
+y_pred_b.tofile('d2_1941528.csv', sep='\n')
 
 
 
