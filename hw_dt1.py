@@ -1,5 +1,6 @@
 import numpy as np
 import seaborn as sns
+from array import array
 from statistics import mean
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
@@ -70,6 +71,8 @@ def svm_model(X_train, Y_train, x_test, y_test):
     plt.savefig('matrix_confusion_svm.png')
     plt.show()
 
+    return model
+
 def perceptron_model(X_train, Y_train, x_test, y_test):
 
     # FIND BEST PARAMETERS WITH RANDOMIZED-SEARCH:
@@ -128,6 +131,8 @@ def perceptron_model(X_train, Y_train, x_test, y_test):
     plt.title('Confusion Matrix Perceptron')
     plt.savefig('matrix_confusion_perceptron.png')
     plt.show()
+
+    return model
 def decision_tree_model(X_train, Y_train, x_test, y_test):
     model = tree.DecisionTreeClassifier()
 
@@ -165,6 +170,8 @@ def decision_tree_model(X_train, Y_train, x_test, y_test):
     plt.savefig('matrix_confusion_dt.png')
     plt.show()
 
+    return model
+
 
 # LOAD THE DATASET
 X, Y = ld.load_data('dataset1.csv')
@@ -192,14 +199,24 @@ elif pre_p == "n" or pre_p == "N":
 
 #SPLIT THE DATA
 X_train, x_test, Y_train, y_test = train_test_split(x_data, y, test_size= 0.2, random_state=1)
+print(x_test.shape)
 
 #TEST THE MODELS:
 print("Run SVM...\n")
-svm_model(X_train, Y_train, x_test, y_test)
+model1 = svm_model(X_train, Y_train, x_test, y_test)
 print("Run Perceptron...\n")
-perceptron_model(X_train, Y_train, x_test, y_test)
+model2 = perceptron_model(X_train, Y_train, x_test, y_test)
 print("Run Decision Tree...\n")
-ecision_tree_model(X_train, Y_train, x_test, y_test)
+model3 = decision_tree_model(X_train, Y_train, x_test, y_test)
+
+blind_test = ld.load_data('blind_test1.csv')
+print("data: \n", blind_test)
+x_data_b = blind_test[0]
+x_data_b = np.array(x_data_b)
+x_data_b = normalize(x_data_b, norm='l2')
+y_pred_b = model1.predict(x_data_b)
+print("Label predette: \n", y_pred_b)
+y_pred_b.tofile('d1_1941528.csv', sep='\n')
 
 
 
